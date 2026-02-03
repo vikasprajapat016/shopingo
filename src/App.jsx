@@ -1,19 +1,19 @@
 import Login from './components/login'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Home from './pages/Home'
-import About from './pages/About'
-import Products from './components/Products'
-import ProductDetails from './pages/ProductDetails'
-import Profile from './components/Profile'
-import SignUp from './components/SignUp'
+import Home from './pages/Home.jsx'
+import About from './pages/About.jsx'
+import Products from './components/Products.jsx'
+import ProductDetails from './pages/ProductDetails.jsx'
+import Profile from './components/Profile.jsx'
+import SignUp from './components/SignUp.jsx'
 import { Toaster } from 'react-hot-toast'
-import ProtectedRoute from './components/ProtectedRoute'
-import Layout from './components/Layout'
-import Cart from './components/Cart'
-import MyOrders from './pages/MyOrders'
-import Offers from "./components/Offers"
-import OfferProduct from './pages/OfferProducts'
-import CategoryProducts from "./components/CategoryProducts"
+import ProtectedRoute from './components/ProtectedRoute.jsx'
+import Layout from './components/Layout.jsx'
+import Cart from './components/Cart.jsx'
+import MyOrders from './pages/MyOrders.jsx'
+import Offers from "./components/Offers.jsx"
+import OfferProduct from './pages/OfferProducts.jsx'
+import CategoryProducts from "./components/CategoryProducts.jsx"
 
 
 
