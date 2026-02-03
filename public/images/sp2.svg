@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#4F46E5"></rect>
+
+  <!-- Shopping bag -->
+  <path d="M20 24H44L42 46H22L20 24Z" fill="white"></path>
+  <path d="M26 24C26 19 30 16 32 16C34 16 38 19 38 24" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+</svg>

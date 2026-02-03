@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#4F46E5"></rect>
+
+  <!-- Shopping cart -->
+  <path d="M18 22H46L43 38H21L18 22Z" fill="white"></path>
+  <circle cx="25" cy="46" r="4" fill="white"></circle>
+  <circle cx="39" cy="46" r="4" fill="white"></circle>
+
+  <!-- Handle -->
+  <path d="M18 22L16 16H12" stroke="white" stroke-width="3" stroke-linecap="round"></path>
+</svg>
