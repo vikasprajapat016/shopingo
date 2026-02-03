@@ -8,12 +8,13 @@ import Profile from './components/Profile.jsx'
 import SignUp from './components/SignUp.jsx'
 import { Toaster } from 'react-hot-toast'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
-import Layout from './components/Layout.jsx'
 import Cart from './components/Cart.jsx'
 import MyOrders from './pages/MyOrders.jsx'
 import Offers from "./components/Offers.jsx"
 import OfferProduct from './pages/OfferProducts.jsx'
 import CategoryProducts from "./components/CategoryProducts.jsx"
+import Layout from './components/layout'
+
 
 
 
