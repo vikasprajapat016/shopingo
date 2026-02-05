@@ -97,7 +97,7 @@ const Profile = () => {
   return (
     <>
 
-      <main className="min-h-screen bg-gray-100 pt-28 flex justify-center px-4">
+      <main className="min-h-screen bg-gray-100 pt-28 flex justify-center px-4 pb-10">
         <form
           onSubmit={handleSubmit}
           className="w-full max-w-md bg-white rounded-xl shadow-md p-6"

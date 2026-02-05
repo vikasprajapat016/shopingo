@@ -28,29 +28,37 @@ const HomeSlider = () => {
 
   return (
     <Swiper
-      modules={[Autoplay, Pagination, Navigation]}
-      autoplay={{ delay: 3000, disableOnInteraction: false }}
-      pagination={{ clickable: true }}
-      navigation
-      loop
-      className="w-full h-auto mt-16"
-    >
+  modules={[Autoplay, Pagination, Navigation]}
+    autoplay={{ delay: 3000, disableOnInteraction: false }}
+    pagination={{ clickable: true }}
+    navigation
+    loop
+    className="w-full aspect-[16/9] sm:aspect-[21/9] mt-20 sm:mt-6 md:mt-20 rounded
+               [&_.swiper-pagination-bullet]:bg-white
+               [&_.swiper-pagination-bullet-active]:bg-indigo-600"
+>
+
+    
       {sliders.map((s) => (
         <SwiperSlide key={s._id}>
           {s.link ? (
             <a href={s.link}>
-              <img
-                src={`${baseUrl}/${s.image}`}
-                alt={s.title}
-                className="w-full h-[420px] object-cover"
-              />
+        <img
+  src={`${baseUrl}/${s.image}`}
+  alt={s.title}
+  className="w-full h-full object-contain sm:object-cover rounded-md"
+  loading="lazy"
+/>
+
             </a>
           ) : (
-            <img
-              src={`${baseUrl}/${s.image}`}
-              alt={s.title}
-              className="w-full h-[420px] object-cover"
-            />
+         <img
+  src={`${baseUrl}/${s.image}`}
+  alt={s.title}
+  className="w-full h-full object-contain sm:object-cover rounded-md"
+  loading="lazy"
+/>
+
           )}
         </SwiperSlide>
       ))}

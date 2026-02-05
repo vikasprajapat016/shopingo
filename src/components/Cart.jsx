@@ -6,7 +6,7 @@ import { useAuth } from "./AuthContext";
 import toast from "react-hot-toast";
 
 const Cart = () => {
-  const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
+  const { cart, removeFromCart, updateQuantity, clearCart, loading } = useCart();
   const { user } = useAuth();
 
   const [offers, setOffers] = useState([]);
@@ -149,8 +149,11 @@ const Cart = () => {
               <p>${item.price}</p>
             </div>
 
-            <div className="flex items-center gap-2">
-              <button
+          <div className="flex justify-between items-center gap-6">
+                 <div className="flex items-center gap-4 text-xl font-semibold ">
+              <button 
+                disabled={loading}
+                className="font-bold text-red-600 cursor-pointer"
                 onClick={() =>
                   updateQuantity(
                     item.productId,
@@ -162,6 +165,8 @@ const Cart = () => {
               </button>
               <span>{item.quantity}</span>
               <button
+              disabled={loading}
+              className="cursor-pointer text-green-700 font-bold"
                 onClick={() =>
                   updateQuantity(item.productId, item.quantity + 1)
                 }
@@ -174,12 +179,13 @@ const Cart = () => {
               className="text-red-600 cursor-pointer"
               onClick={() => removeFromCart(item.productId)}
             />
+            </div>
           </div>
         ))}
 
         {/* SUMMARY */}
-        <div className="mt-6">
-          <p>Subtotal: ${totalPrice.toFixed(2)}</p>
+        <div className="mt-6 font-semibold">
+          <p>Total: ${totalPrice.toFixed(2)}</p>
 
           {offers.length > 0 && (
             <div className="mt-3">
@@ -202,7 +208,7 @@ const Cart = () => {
 
               <button
                 onClick={applyOffer}
-                className="ml-3 px-4 py-2 bg-green-600 text-white rounded"
+                className="ml-3 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
               >
                 Apply Offer
               </button>
@@ -216,14 +222,24 @@ const Cart = () => {
           )}
 
           <h2 className="text-xl font-bold mt-2">
-            Total: ${finalAmount.toFixed(2)}
+            Amount To Pay : ${finalAmount.toFixed(2)}
           </h2>
 
-          <button
+         
+        </div>
+
+        <div className="flex justify-between items-center mt-10 ">
+           <button
             onClick={handleCheckout}
-            className="mt-4 px-6 py-3 bg-indigo-600 text-white rounded"
+            className=" px-6 py-3 bg-indigo-600 text-white rounded cursor-pointer"
           >
             Checkout
+          </button>
+          <button 
+          disabled={loading}
+          onClick={() => clearCart()}
+          className="px-6 py-3 bg-red-500 hover:bg-red-700 text-white rounded cursor-pointer ">
+              CLear Cart
           </button>
         </div>
       </div>

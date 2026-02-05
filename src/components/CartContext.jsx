@@ -12,6 +12,8 @@ const API_URL = `${baseUrl}/cart`;
 
 export const CartProvider = ({ children }) => {
   const { user } = useAuth();
+  const [loading , setLoading] = useState(false);
+const [loadingProductId, setLoadingProductId] = useState(null);
 
   const [cart, setCart] = useState([]);
 
@@ -32,7 +34,7 @@ export const CartProvider = ({ children }) => {
   // Add product
   const addToCart = async (product, quantity = 1) => {
     if (!user) return toast.error("Login to add to cart");
-
+  setLoadingProductId(product._id);
     try {
       const payload = {
         product: {
@@ -52,6 +54,8 @@ export const CartProvider = ({ children }) => {
     } catch (err) {
       console.error(err);
       toast.error("Failed to add product");
+    } finally {
+    setLoadingProductId(null);
     }
   };
 
@@ -62,7 +66,7 @@ export const CartProvider = ({ children }) => {
 const updateQuantity = async (productId, quantity) => {
   if (!user) return toast.error("Login required");
 
-  
+      setLoading(true)
   try {
     
     const { data } = await axios.patch(
@@ -75,6 +79,8 @@ const updateQuantity = async (productId, quantity) => {
   toast.success("Quantity updated")
   } catch (error) {
     toast("Failed to update quantity")
+  } finally {
+    setLoading(false)
   }
 };
 
@@ -83,7 +89,7 @@ const updateQuantity = async (productId, quantity) => {
   // Remove product
  const removeFromCart = async (productId) => {
   if (!user) return toast.error("Login to remove item");
-
+      setLoading(true)
   try {
     const { data } = await axios.delete(
       `${API_URL}/${user._id}/${productId}`,
@@ -95,6 +101,8 @@ const updateQuantity = async (productId, quantity) => {
   } catch (err) {
     console.error(err);
     toast.error("Failed to remove item");
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -102,7 +110,7 @@ const clearCart = async () => {
   if (!user?._id) {
     return toast.error("Cannot clear cart: User not logged in");
   }
-
+    setLoading(true)
   try {
     const { data } = await axios.delete(
       `${API_URL}/clear/${user._id}`,
@@ -113,6 +121,8 @@ const clearCart = async () => {
   } catch (err) {
     console.error("Clear cart failed:", err);
     toast.error(err.response?.data?.message || "Failed to clear cart");
+  } finally {
+    setLoading(false)
   }
 };
 
@@ -124,7 +134,7 @@ const clearCart = async () => {
 
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart, clearCart, loading , loadingProductId}}>
       {children}
     </CartContext.Provider>
   );

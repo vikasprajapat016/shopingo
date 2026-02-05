@@ -31,7 +31,7 @@ const Footer = () => {
         </div>
 
         {/* Useful Links */}
-        <div>
+        <div className="flex flex-col  items-center ">
           <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
           <ul className="space-y-2 text-gray-700">
             <li>
@@ -58,7 +58,7 @@ const Footer = () => {
         </div>
 
         {/* Contact */}
-        <div>
+        <div className="flex flex-col  items-center ">
           <h3 className="font-semibold text-lg mb-4">Contact Us</h3>
           <p className="text-gray-700 text-sm">
             Email:{" "}
@@ -78,7 +78,7 @@ const Footer = () => {
         </div>
 
         {/* Policies */}
-        <div>
+        <div className="relative flex flex-col  items-center ">
           <h3 className="font-semibold text-lg mb-4">Our Promise</h3>
           <div className="space-y-3 text-gray-700">
             <div className="flex items-center gap-3">

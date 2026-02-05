@@ -9,30 +9,20 @@ const baseUrl = import.meta.env.VITE_API_URL;
 const Card = ({  product }) => {
   const navigate = useNavigate();
   const [wishlisted, setWishlisted] = useState(false);
-  const {addToCart,} = useCart();
+  const [quantity, setQuantity] = useState(1);
+  
+  const {addToCart, updateQuantity, loading, cart, loadingProductId} = useCart();
 
   const formattedPrice = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
   }).format(product.price);
 
-  const share = (product) => {
-    const url = `${window.location.origin}/product/${product._id}`;
 
-    if (navigator.share) {
-    navigator.share({
-  title: product.title,
-  text: "Check out this item",
-  url,
-}).catch(err => {
-  console.log("Share cancelled", err);
-});
-
-    } else {
-      navigator.clipboard.writeText(url);
-      alert("Link copied")
-    }
-  }
+  const isInCart = cart.some(
+    item => item.productId === product?._id
+  );
+  console.log(isInCart)
 
 
   if (!product) {
@@ -66,7 +56,9 @@ const Card = ({  product }) => {
 
         {/* Wishlist */}
         <button
-          onClick={() => setWishlisted(!wishlisted)}
+          onClick={(e) =>{
+            e.stopPropagation();
+            setWishlisted(!wishlisted)}}
           className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:scale-110 transition"
         >
           {wishlisted ? (
@@ -89,27 +81,63 @@ const Card = ({  product }) => {
 
         {/* Price & Actions */}
         <div className="mt-4 flex justify-between items-center">
-          <span className="text-xl font-bold text-indigo-600">
-            {formattedPrice}
+          <span className=" text-lg md:text-xl font-bold text-indigo-600">
+            ${product.price.toFixed(0)}
           </span>
 
-          <div className="flex gap-2">
-            <button
-            title="Share "
-            onClick={() => share(product)}
-              className="text-sm px-3 py-1.5 rounded-lg border border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white transition"
-            >
-              <FaShare/>
-            </button>
 
-            <button
-              className="bg-indigo-600 p-2 rounded-lg text-white cursor-pointer hover:bg-indigo-700 transition"
-              title="Add to Cart"
-              onClick={() => addToCart(product) }
-            >
-              <FaShoppingCart />
-            </button>
-          </div>
+            {/*add to cart */}
+
+        <div className="flex gap-2">
+  {loadingProductId === product._id ? (
+    <p className="text-xs">Adding...</p>
+  ) : isInCart ? (
+    /* Quantity controls (NOT inside a button) */
+    <div className="flex items-center border rounded-lg">
+      <button 
+      disabled={loading}
+        onClick={(e) => {
+          
+          e.stopPropagation();
+          quantity > 1 && setQuantity(quantity - 1);
+          updateQuantity(product._id, quantity)          
+        }}
+        className="px-3 py-1 text-lg"
+      >
+        −
+      </button>
+
+      <span className="px-4">{quantity}</span>
+
+      <button
+      disabled={loading}
+        onClick={(e) => {
+          e.stopPropagation();
+          setQuantity(quantity + 1);
+          updateQuantity(product._id, quantity)
+        }}
+        className="px-3 py-1 text-lg"
+      >
+        +
+      </button>
+    </div>
+  ) : (
+    /* Add to cart button */
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        addToCart(product, quantity);
+      }}
+      className="bg-indigo-600 p-2 rounded-lg text-white hover:bg-indigo-700 transition"
+      title="Add to Cart"
+    >
+      <FaShoppingCart />
+    </button>
+  )}
+</div>
+
+
+
         </div>
       </div>
     </div>

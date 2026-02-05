@@ -13,7 +13,7 @@ const CategoryShowcase = ({ categories = [] }) => {
   }
 
   // CONFIG
-  const SLIDER_SIZE = 6;
+  const SLIDER_SIZE = 10;
   const ROW_SIZE = 10;
 
   // Split sections

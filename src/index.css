@@ -8,10 +8,40 @@ html{
 }
 
 html, body {
-    overflow-x:hidden;
-    overflow-y: scroll;
-    max-width: 100%;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
+
+.swiper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.swiper-pagination {
+  bottom: 8px !important;
+}
+
+
+.swiper,
+.swiper-wrapper,
+.swiper-slide {
+  height: auto !important;
+}
+
+.swiper-slide {
+  overflow: hidden;
+}
+
+/* Hide arrows on mobile */
+@media (max-width: 640px) {
+  .swiper-button-prev,
+  .swiper-button-next {
+    display: none !important;
+  }
+}
+
+
 
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);
