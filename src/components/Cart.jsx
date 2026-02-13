@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useCart } from "../components/CartContext";
-import { FaTrash } from "react-icons/fa";
+import { FaMinus, FaPlus, FaTrash } from "react-icons/fa";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
 import toast from "react-hot-toast";
+import { Currency } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cart, removeFromCart, updateQuantity, clearCart, loading } = useCart();
@@ -13,9 +15,10 @@ const Cart = () => {
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [appliedOffer, setAppliedOffer] = useState(null);
   const [discount, setDiscount] = useState(0);
-
+  const [paymentMethod, setPaymentMethod] = useState("COD")
   const baseUrl = import.meta.env.VITE_API_URL;
 
+  const navigate = useNavigate();
   // ---------------- TOTAL ----------------
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -88,31 +91,93 @@ const Cart = () => {
 
   const finalAmount = Math.max(0, totalPrice - discount);
 
-  // ---------------- CHECKOUT ----------------
+  // ---------------- Cash On Delivery ----------------
   const handleCheckout = async () => {
     try {
       if (!user) return toast.error("Login to checkout");
-
-      const payload = {
-        items: cart.map(item => ({
-          product: item.productId,
-          title: item.title,
-          price: item.price,
-          quantity: item.quantity,
-          image: item.image, // ✅ FIXED
-          category: item.category,
-        })),
-        totalAmount: finalAmount,
-        offerId: appliedOffer?._id || null,
-      };
-
-      await axios.post(`${baseUrl}/orders/create`, payload, {
+const payload = {
+  items: cart.map(item => ({
+    product:
+      typeof item.productId === "object"
+        ? item.productId._id
+        : item.productId,
+    quantity: item.quantity,
+  })),
+  paymentMethod,
+  offerId: appliedOffer?._id || null,
+};
+      if (paymentMethod === "COD") {
+      await axios.post(`${baseUrl}/razor/create/cod-order`, payload, {
         withCredentials: true,
       });
 
       clearCart();
       toast.success("Order placed successfully");
+      navigate("/orders")
+      return;
+    }
+
+  //------------------- Online Payment -----------------
+
+
+  if (!window.Razorpay) {
+  toast.error("Razorpay SDK failed to load");
+  return;
+}
+
+      
+      const {data} = await axios.post(`${baseUrl}/razor/create/online/order`,
+        payload,
+        {withCredentials: true}
+      );
+
+   console.log("Razorpay Order:", data.razorOrder);
+console.log("Amount (paise):", data.razorOrder.amount);
+
+
+
+
+      const options = {
+    key: import.meta.env.VITE_RAZORPAY_KEY_ID, // 🔴 REQUIRED
+  amount: data.razorOrder.amount,     // ✅ FIX
+        currency: "INR",
+        name: "Shopingo",
+        description : "order Payment",
+  order_id: data.razorOrder.id,       // ✅ FIX
+
+     handler: async function (response) {
+  await axios.post(`${baseUrl}/razor/verify/order`, {
+   
+  items: payload.items,
+  offerId: payload.offerId,
+  paymentMethod: "ONLINE",
+  razorpay_order_id: response.razorpay_order_id,
+  razorpay_payment_id: response.razorpay_payment_id,
+  razorpay_signature: response.razorpay_signature,
+
+
+  }
+
+,
+        { withCredentials: true }
+        );
+      
+      clearCart()
+      toast.success("Payment Successful")
+            navigate("/orders")
+
+      },
+      };
+     
+      console.log("Opening Razorpay with:", options);
+
+
+      const rzp = new window.Razorpay(options)
+      rzp.open();
+
+
     } catch (err) {
+      console.log(err)
       toast.error(err.response?.data?.message || "Checkout failed");
     }
   };
@@ -127,30 +192,34 @@ const Cart = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-6xl mx-auto bg-white p-8 rounded-xl shadow">
+    <main className="min-h-screen bg-gray-200 py-12">
 
-        <h1 className="text-2xl font-bold mb-6 text-center">
+        <h1 className="text-2xl mt-10 font-bold mb-6 text-center">
           Shopping Cart
         </h1>
+      <div className="max-w-7xl mx-auto p-8 rounded-xl shadow">
 
-        {/* ITEMS */}
+      
+
+      <div className="flex flex-col sm:flex-row gap-8  ">
+          <div className="bg-white p-8 rounded-md md:min-w-3xl min-h-100">
+           {/* ITEMS */}
         {cart.map(item => (
           <div
             key={item.productId}
-            className="flex gap-4 items-center border-b py-4"
+            className=" gap-4 border-b py-4 flex flex-col md:flex-row md:justify-between "
           >
-            <img
+            <div className="flex gap-4 items-center"><img
               src={`${baseUrl}/${item.image}`}
-              className="w-32 h-32 object-contain"
+              className="w-22 md:w-36 md:h-32 h-22 object-contain"
             />
             <div className="flex-1">
-              <h2 className="font-semibold">{item.title}</h2>
-              <p>${item.price}</p>
+              <h2 className="font-semibold text-xs md:text-xl text-gray-700">{item.title}</h2>
+              <p className="mt-2 text-lg font-bold text-gray-700">${item.price}</p>
             </div>
-
-          <div className="flex justify-between items-center gap-6">
-                 <div className="flex items-center gap-4 text-xl font-semibold ">
+ </div>
+          <div className="flex md:flex-col md:justify-center justify-between items-center gap-10">
+                 <div className="flex ml-2  items-center gap-4 text-xl font-semibold ">
               <button 
                 disabled={loading}
                 className="font-bold text-red-600 cursor-pointer"
@@ -161,7 +230,7 @@ const Cart = () => {
                   )
                 }
               >
-                -
+                <FaMinus size={18}/>
               </button>
               <span>{item.quantity}</span>
               <button
@@ -171,7 +240,7 @@ const Cart = () => {
                   updateQuantity(item.productId, item.quantity + 1)
                 }
               >
-                +
+                <FaPlus size={22}/>
               </button>
             </div>
 
@@ -182,15 +251,17 @@ const Cart = () => {
             </div>
           </div>
         ))}
+        </div>
 
         {/* SUMMARY */}
-        <div className="mt-6 font-semibold">
-          <p>Total: ${totalPrice.toFixed(2)}</p>
+        <div className=" font-semibold bg-white px-6 py-2 rounded-md  max-h-90">
+          <div className="text-gray-700 pb-3 border-b w-full mb-6">Price Details </div>
+          <p>Price ({cart.length} items):    ${totalPrice.toFixed(2)} </p>
 
           {offers.length > 0 && (
             <div className="mt-3">
               <select
-                className="border p-2 rounded"
+                className="border-black border-1 p-2 rounded"
                 value={selectedOffer?._id || ""}
                 onChange={(e) =>
                   setSelectedOffer(
@@ -208,7 +279,7 @@ const Cart = () => {
 
               <button
                 onClick={applyOffer}
-                className="ml-3 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
+                className="ml-3 mt-3 px-4 py-2 bg-green-600 text-white rounded cursor-pointer"
               >
                 Apply Offer
               </button>
@@ -221,13 +292,25 @@ const Cart = () => {
             </p>
           )}
 
-          <h2 className="text-xl font-bold mt-2">
-            Amount To Pay : ${finalAmount.toFixed(2)}
+          <h2 className="text-lg font-bold mt-2">
+            Total Amount : ${finalAmount.toFixed(2)}
           </h2>
+
+
+          <select
+  className="border-black border-1 p-2 rounded mt-4 mb-3"
+  value={paymentMethod}
+  onChange={(e) => setPaymentMethod(e.target.value)}
+>
+  <option value="COD">Cash On Delivery</option>
+  <option value="ONLINE">Online</option>
+</select>
+
 
          
         </div>
 
+      </div>
         <div className="flex justify-between items-center mt-10 ">
            <button
             onClick={handleCheckout}

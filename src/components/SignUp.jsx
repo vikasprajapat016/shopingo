@@ -3,6 +3,9 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebook } from "react-icons/fa6";
+import { signInWithPopup } from "firebase/auth";
+import axios from "axios";
+import { auth, googleProvider } from './lib/firebase'
 
 
 const baseUrl = import.meta.env.VITE_API_URL
@@ -18,8 +21,36 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { user, loading: authLoading } = useAuth();
+  const { user, login, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+
+
+
+   const googleAuth = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider)
+
+            const idToken = await result.user.getIdToken();
+
+
+            //backend call
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/google/auth`,
+                {idToken},
+                {withCredentials: true}
+            );
+
+            login(res.data.user)
+            toast.success("Login successfully")
+
+            navigate("/")
+        }catch (error) {
+  console.error("Google Auth Error:", error.code, error.message);
+  toast.error(error.message);
+
+        }
+    }
+  
+
 
   const handleChange = (e) => {
     setFormData({
@@ -79,7 +110,9 @@ const SignUp = () => {
 
         {/* Social Signup */}
         <div className="flex gap-4 justify-center mb-6">
-          <button className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100 transition">
+          <button
+          onClick={() => googleAuth()}
+          className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100 transition">
             <FaGoogle /> Google
           </button>
           <button className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-100 transition">

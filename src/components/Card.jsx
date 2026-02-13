@@ -22,7 +22,6 @@ const Card = ({  product }) => {
   const isInCart = cart.some(
     item => item.productId === product?._id
   );
-  console.log(isInCart)
 
 
   if (!product) {
@@ -34,13 +33,13 @@ const Card = ({  product }) => {
     <div className="group bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 cursor-pointer"
 >      
       {/* Image Section */}
-      <div className="relative bg-gray-100 flex justify-center items-center h-52"
+      <div className="relative bg-gray-100 flex justify-center items-center h-40 md:h-52"
           onClick={() => navigate(`/product/${product._id}`)}
 >
         <img
           src={`${baseUrl}/${product.thumbnail}`}
           alt={product.title}
-          className="h-40 object-contain transition-transform duration-300 group-hover:scale-110"
+          className="h-30 md:h-40 object-contain transition-transform duration-300 group-hover:scale-110"
           onError={(e) => {
             e.target.src =
               "https://cdn-icons-png.flaticon.com/512/679/679821.png";
@@ -71,7 +70,7 @@ const Card = ({  product }) => {
 
       {/* Content */}
       <div className="p-4">
-        <h2 className="text-lg font-semibold text-gray-800 line-clamp-2">
+        <h2 className="text-lg font-semibold text-gray-800 line-clamp-1">
           {product.title}
         </h2>
 

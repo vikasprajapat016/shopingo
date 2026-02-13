@@ -178,9 +178,9 @@ function Home() {
         {/*================= PRODUCT RAIL (PLACEHOLDER) =================*/}
  
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="bg-white rounded-lg shadow-sm py-3">
   {/* Header */}
-  <div className="flex items-center justify-between mb-6">
+  <div className="flex items-center justify-between mb-6 px-3">
     <h3 className="text-lg font-semibold text-gray-800">
       Top Picks for You
     </h3>
@@ -193,9 +193,9 @@ function Home() {
   </div>
 
   {/* Product Blocks */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-18">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-18 py-4">
     {/* Block 1 */}
-    <div className="bg-gray-100 rounded-md p-4 shadow-lg ">
+    <div className="bg-gray-200  p-4 shadow-lg ">
       <div className="grid grid-cols-2 gap-4">
         {topProducts.slice(0, 4).map((product) => (
           <CardWrapper key={product._id}>
@@ -206,7 +206,7 @@ function Home() {
     </div>
 
     {/* Block 2 */}
-    <div className="bg-gray-100 rounded-md p-4">
+    <div className="bg-gray-200 rounded p-4">
       <div className="grid grid-cols-2 gap-4">
         {topProducts.slice(4, 8).map((product) => (
           <CardWrapper key={product._id}>
