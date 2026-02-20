@@ -256,7 +256,7 @@ console.log("Amount (paise):", data.razorOrder.amount);
         {/* SUMMARY */}
         <div className=" font-semibold bg-white px-6 py-2 rounded-md  max-h-90">
           <div className="text-gray-700 pb-3 border-b w-full mb-6">Price Details </div>
-          <p>Price ({cart.length} items):    ${totalPrice.toFixed(2)} </p>
+          <p>Price ({cart.length} items):    ₹{totalPrice.toFixed(2)} </p>
 
           {offers.length > 0 && (
             <div className="mt-3">
@@ -288,12 +288,12 @@ console.log("Amount (paise):", data.razorOrder.amount);
 
           {appliedOffer && (
             <p className="text-green-600 mt-2">
-              Discount: -${discount.toFixed(2)}
+              Discount: -₹{discount.toFixed(2)}
             </p>
           )}
 
           <h2 className="text-lg font-bold mt-2">
-            Total Amount : ${finalAmount.toFixed(2)}
+            Total Amount : ₹{finalAmount.toFixed(2)}
           </h2>
 
 
