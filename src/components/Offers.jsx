@@ -14,14 +14,16 @@ const OffersPage = () => {
 
   return (
     <div className="min-h-screen px-4 sm:px-6 lg:px-10 py-8 bg-gray-50 mt-15">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center">
         🔥 Current Offers
       </h1>
 
       {offers.length === 0 && (
-        <p className="text-gray-500 text-lg">
+      <div className="flex justify-center items-center">
+          <p className="text-gray-500 text-lg ">
           No offers available right now
         </p>
+        </div>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

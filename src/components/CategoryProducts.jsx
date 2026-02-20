@@ -53,7 +53,7 @@ const Products = () => {
   return (
     <>
 
-      <main className="bg-gray-50 min-h-screen pt-24">
+      <main className="bg-gray-50 min-h-screen pt-24 mb-10">
         <div className="max-w-7xl mx-auto px-6">
           
           {/* PAGE TITLE */}

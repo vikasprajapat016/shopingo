@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import OrderProgress from "../components/OrderProgress";
+import { useNavigate } from "react-router-dom";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
   const API = import.meta.env.VITE_API_URL;
 
   const cancelOrder = async (orderId) => {
@@ -101,7 +103,7 @@ const MyOrders = () => {
       {orders.map(order => (
         <div
           key={order._id}
-          className="border rounded-lg p-4 space-y-4"
+          className="border rounded-lg p-4 space-y-4 mb-10"
         >
           {/* ORDER HEADER */}
           <div className="flex justify-between items-center">
@@ -119,7 +121,11 @@ const MyOrders = () => {
                 order.orderStatus
               )}`}
             >
-              {order.orderStatus}
+            {order.orderStatus === "CANCELLED"? 
+              "CANCELLED"
+              :
+              <OrderProgress status={order.orderStatus}/>  
+          }
             </span>
           </div>
 
@@ -130,11 +136,14 @@ const MyOrders = () => {
                 key={item.product}
                 className="flex gap-4 py-3 items-center"
               >
-{                console.log(item.thumbnail)
-}                <img
+                {/* {console.log(item.product)} */}
+                {/* {console.log(item._id)} */}
+          {/* {   console.log(item.thumbnail)}        */}
+          <img
                   src={`${API}/${item.thumbnail}`}
                   alt={item.title}
-                  className="w-14 h-14 rounded object-cover"
+                  className="w-14 h-14 rounded object-cover cursor-pointer"
+                  onClick={() => navigate(`/product/${item.product}`)}
                 />
 
                 <div className="flex-1">
@@ -147,7 +156,7 @@ const MyOrders = () => {
                 </div>
 
                 <p className="font-medium">
-                  ₹{item.price}
+                  ₹{item.price.toFixed(2)}
                 </p>
               </div>
             ))}
@@ -162,7 +171,7 @@ const MyOrders = () => {
             </p></div>
           <div className=" flex gap-8">
               <p className="text-lg font-semibold">
-              Total: ₹{order.totalAmount}
+              Total: ₹{order.totalAmount.toFixed(2)}
             </p>
 
             {order.orderStatus === "PENDING" && (

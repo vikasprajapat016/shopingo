@@ -42,6 +42,17 @@ html, body {
 }
 
 
+/* Hide scrollbar but allow scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+
 
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);

@@ -74,7 +74,7 @@ const Products = () => {
   <div className="max-w-7xl mx-auto px-4">
 
     {/* ================= CATEGORY SCROLL BAR ================= */}
-    <div className="flex gap-3 overflow-x-auto py-3 mb-6">
+    <div className="flex gap-3 overflow-x-auto no-scrollbar py-3 mb-6">
       <button
         onClick={() => handleCategoryClick(null)}
         className={`px-4 py-2 rounded-full border whitespace-nowrap ${
@@ -83,6 +83,7 @@ const Products = () => {
       >
         All
       </button>
+      
 
       {categories.map((c) => (
         <button

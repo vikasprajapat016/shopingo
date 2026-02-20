@@ -134,39 +134,52 @@ const cartCount = cart.reduce(
 
       {/* MOBILE MENU */}
       {mobileOpen && user && (
-        <div className="md:hidden bg-white border-t shadow-sm">
-          <div className="flex flex-col px-6 py-4 gap-4 text-sm font-medium">
-            <Link to="/" onClick={() => setMobileOpen(false)}>
-              Home
-            </Link>
-            <Link to="/product" onClick={() => setMobileOpen(false)}>
-              Products
-            </Link>
-            <Link to="/about" onClick={() => setMobileOpen(false)}>
-              About
-            </Link>
-            <Link to="/profile" onClick={() => setMobileOpen(false)}>
-              Profile
-            </Link>
-            <Link to="/offers" onClick={() => setMobileOpen(false)}>
-              Offers
-            </Link>
-            <Link to='/cart' onClick={() => setMobileOpen(false)}>
-             Cart ({cartCount})
-            </Link>
-              <Link to="/orders"  onClick={() => setMobileOpen(false)}>
-              Orders
-            </Link>
+  <>
+    {/* Overlay */}
+    <div
+      className="fixed inset-0 bg-black/40 z-40 md:hidden"
+      onClick={() => setMobileOpen(false)}
+    ></div>
 
-            <button
-              onClick={logout}
-              className="text-left text-red-600"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      )}
+    {/* Mobile Menu Panel */}
+    <div className={`fixed top-0 right-0 w-64 h-auto bg-white/20 backdrop-blur-md z-50 shadow-lg md:hidden transform transition-transform duration-300 ${
+  mobileOpen ? "translate-x-0" : "translate-x-full"
+}`}
+>
+      <div className="flex flex-col justify-center items-center px-3 py-6 gap-4 text-sm font-medium">
+        <Link to="/" onClick={() => setMobileOpen(false)}>
+          Home
+        </Link>
+        <Link to="/product" onClick={() => setMobileOpen(false)}>
+          Products
+        </Link>
+        <Link to="/about" onClick={() => setMobileOpen(false)}>
+          About
+        </Link>
+        <Link to="/profile" onClick={() => setMobileOpen(false)}>
+          Profile
+        </Link>
+        <Link to="/offers" onClick={() => setMobileOpen(false)}>
+          Offers
+        </Link>
+        <Link to="/cart" onClick={() => setMobileOpen(false)}>
+          Cart ({cartCount})
+        </Link>
+        <Link to="/orders" onClick={() => setMobileOpen(false)}>
+          Orders
+        </Link>
+
+        <button
+          onClick={logout}
+          className="text-left text-red-600"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </>
+)}
+
     </header>
   );
 };

@@ -61,10 +61,38 @@ const [loadingProductId, setLoadingProductId] = useState(null);
 
 
 
+  
+  // Remove product
+ const removeFromCart = async (productId) => {
+  if (!user) return toast.error("Login to remove item");
+      setLoading(true)
+  try {
+    const { data } = await axios.delete(
+      `${API_URL}/${user._id}/${productId}`,
+      { withCredentials: true }
+    );
+
+    setCart(data.products || []);
+    toast.success("Item removed 🗑️");
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to remove item");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
+
 // update cart 
 
 const updateQuantity = async (productId, quantity) => {
   if (!user) return toast.error("Login required");
+
+  if (quantity === 0) {
+     return removeFromCart(productId);
+  }
 
       setLoading(true)
   try {
@@ -85,26 +113,6 @@ const updateQuantity = async (productId, quantity) => {
 };
 
 
-
-  // Remove product
- const removeFromCart = async (productId) => {
-  if (!user) return toast.error("Login to remove item");
-      setLoading(true)
-  try {
-    const { data } = await axios.delete(
-      `${API_URL}/${user._id}/${productId}`,
-      { withCredentials: true }
-    );
-
-    setCart(data.products || []);
-    toast.success("Item removed 🗑️");
-  } catch (err) {
-    console.error(err);
-    toast.error("Failed to remove item");
-  } finally {
-    setLoading(false);
-  }
-};
 
 const clearCart = async () => {
   if (!user?._id) {

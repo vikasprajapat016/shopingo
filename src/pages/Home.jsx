@@ -99,7 +99,9 @@ function Home() {
 
 
 
-        {/* ================= DEALS YOU MAY LIKE (BY CATEGORY) ================= */}
+                    {/* ================= DEALS YOU MAY LIKE (BY CATEGORY) ================= */}
+
+        {offers.length > 0 && (
  <div className="bg-white rounded-lg shadow-sm p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-800">
@@ -113,7 +115,7 @@ function Home() {
         </button>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto scrollbar-hide py-2">
+      <div className="flex gap-4 overflow-x-auto no-scrollbar py-2">
         {offers.length === 0
           ? Array.from({ length: 6 }).map((_, i) => (
               <div
@@ -154,6 +156,9 @@ function Home() {
 
 
 
+        )
+        
+        }
 
 
         {/* ================= SHOP BY CATEGORY ================= */}
@@ -193,7 +198,7 @@ function Home() {
   </div>
 
   {/* Product Blocks */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-18 py-4">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-18 py-4 sm:px-1">
     {/* Block 1 */}
     <div className="bg-gray-200  p-4 shadow-lg ">
       <div className="grid grid-cols-2 gap-4">
@@ -206,7 +211,7 @@ function Home() {
     </div>
 
     {/* Block 2 */}
-    <div className="bg-gray-200 rounded p-4">
+    <div className="bg-gray-200  p-4">
       <div className="grid grid-cols-2 gap-4">
         {topProducts.slice(4, 8).map((product) => (
           <CardWrapper key={product._id}>

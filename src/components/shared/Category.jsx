@@ -31,7 +31,7 @@ const CategoryShowcase = ({ categories = [] }) => {
         <div key={index} className="space-y-8">
 
           {/* ================= HERO SLIDER ================= */}
-          <div className="flex gap-4 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-4 overflow-x-auto  no-scrollbar">
             {section.slider.map((cat) => (
               <div
                 key={cat._id}
@@ -115,7 +115,7 @@ const AmazonRow = ({ title, items, onClick }) => {
       {/* Row */}
       <div
         ref={rowRef}
-        className="flex gap-4 overflow-x-auto scrollbar-hide px-8"
+        className="flex gap-4 overflow-x-auto no-scrollbar px-8"
       >
         {items.map((cat) => (
           <div

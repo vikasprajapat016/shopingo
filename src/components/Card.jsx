@@ -13,10 +13,13 @@ const Card = ({  product }) => {
   
   const {addToCart, updateQuantity, loading, cart, loadingProductId} = useCart();
 
-  const formattedPrice = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(product.price);
+ const formattedPrice = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "INR",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0
+}).format(product.price);
+
 
 
   const isInCart = cart.some(
@@ -30,7 +33,7 @@ const Card = ({  product }) => {
 
 
   return (
-    <div className="group bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 cursor-pointer"
+    <div className="group bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 "
 >      
       {/* Image Section */}
       <div className="relative bg-gray-100 flex justify-center items-center h-40 md:h-52"
@@ -39,7 +42,7 @@ const Card = ({  product }) => {
         <img
           src={`${baseUrl}/${product.thumbnail}`}
           alt={product.title}
-          className="h-30 md:h-40 object-contain transition-transform duration-300 group-hover:scale-110"
+          className="h-30 md:h-40 object-contain transition-transform duration-300 group-hover:scale-110 cursor-pointer"
           onError={(e) => {
             e.target.src =
               "https://cdn-icons-png.flaticon.com/512/679/679821.png";
@@ -81,7 +84,7 @@ const Card = ({  product }) => {
         {/* Price & Actions */}
         <div className="mt-4 flex justify-between items-center">
           <span className=" text-lg md:text-xl font-bold text-indigo-600">
-            ${product.price.toFixed(0)}
+            {formattedPrice}
           </span>
 
 
@@ -96,26 +99,41 @@ const Card = ({  product }) => {
       <button 
       disabled={loading}
         onClick={(e) => {
-          
-          e.stopPropagation();
-          quantity > 1 && setQuantity(quantity - 1);
-          updateQuantity(product._id, quantity)          
-        }}
-        className="px-3 py-1 text-lg"
+       e.stopPropagation();
+
+  const cartItem = cart.find(item => item.productId === product._id);
+
+  if (!cartItem) return;
+
+  if (cartItem.quantity < 1) {
+    removeFromCart(product._id);
+  } else {
+    updateQuantity(product._id, cartItem.quantity - 1);
+  }
+}}
+
+        className="px-3 py-1 text-lg cursor-pointer"
       >
         −
       </button>
 
-      <span className="px-4">{quantity}</span>
+      <span className="px-4">
+          {cart.find(item => item.productId === product._id)?.quantity || 1}
+      </span>
 
       <button
       disabled={loading}
-        onClick={(e) => {
-          e.stopPropagation();
-          setQuantity(quantity + 1);
-          updateQuantity(product._id, quantity)
-        }}
-        className="px-3 py-1 text-lg"
+                            onClick={(e) => {
+  e.stopPropagation();
+
+  const cartItem = cart.find(item => item.productId === product._id);
+
+  if (!cartItem) return;
+
+  updateQuantity(product._id, cartItem.quantity + 1);
+}}
+
+        className="px-3 py-1 text-lg cursor-pointer"
       >
         +
       </button>
@@ -127,7 +145,7 @@ const Card = ({  product }) => {
         e.stopPropagation();
         addToCart(product, quantity);
       }}
-      className="bg-indigo-600 p-2 rounded-lg text-white hover:bg-indigo-700 transition"
+      className="bg-indigo-600 p-2 rounded-lg text-white hover:bg-indigo-700 transition cursor-pointer"
       title="Add to Cart"
     >
       <FaShoppingCart />
