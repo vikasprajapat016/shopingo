@@ -215,7 +215,7 @@ console.log("Amount (paise):", data.razorOrder.amount);
             />
             <div className="flex-1">
               <h2 className="font-semibold text-xs md:text-xl text-gray-700">{item.title}</h2>
-              <p className="mt-2 text-lg font-bold text-gray-700">${item.price}</p>
+              <p className="mt-2 text-lg font-bold text-gray-700">₹{item.price.toFixed(2)}</p>
             </div>
  </div>
           <div className="flex md:flex-col md:justify-center justify-between items-center gap-10">
